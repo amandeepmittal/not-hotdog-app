@@ -9,7 +9,11 @@ import {
 } from 'react-native'
 import { Header, Icon } from 'react-native-elements'
 import * as Permissions from 'expo-permissions'
+import * as ImagePicker from 'expo-image-picker'
+import uuid from 'uuid'
+
 import UploadingOverlay from './components/UploadingOverlay'
+import firebase from './config/Firebase'
 
 const VISION_API_KEY = 'AIzaSyBIj3L0pxRZYlHgx_CAcakASf7OOhm4Exk'
 
@@ -44,7 +48,7 @@ class App extends Component {
     hasGrantedCameraPermission: false,
     hasGrantedCameraRollPermission: false,
     image: null,
-    uploading: true,
+    uploading: false,
     googleResponse: false
   }
 
@@ -69,23 +73,39 @@ class App extends Component {
     }
   }
 
-  // renderUploadingOverlay = () => {
-  //   if (this.state.uploading) {
-  //     return (
-  //       <View
-  //         style={[
-  //           StyleSheet.absoluteFill,
-  //           {
-  //             backgroundColor: 'rgba(255,255,255,0.8)',
-  //             alignItems: 'center',
-  //             justifyContent: 'center'
-  //           }
-  //         ]}>
-  //         <ActivityIndicator color='#000' animating size='large' />
-  //       </View>
-  //     )
-  //   }
-  // }
+  takePhoto = async () => {
+    let pickerResult = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3]
+    })
+
+    this.handleImagePicked(pickerResult)
+  }
+
+  pickImage = async () => {
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [16, 9]
+    })
+
+    this.handleImagePicked(pickerResult)
+  }
+
+  handleImagePicked = async pickerResult => {
+    try {
+      this.setState({ uploading: true })
+
+      if (!pickerResult.cancelled) {
+        uploadUrl = await uploadImageAsync(pickerResult.uri)
+        this.setState({ image: uploadUrl })
+      }
+    } catch (e) {
+      console.log(e)
+      alert('Image Upload failed')
+    } finally {
+      this.setState({ uploading: false })
+    }
+  }
 
   render() {
     const {
@@ -99,7 +119,7 @@ class App extends Component {
       hasGrantedCameraRollPermission === false
     ) {
       return (
-        <View style={styles.container}>
+        <View style={{ flex: 1, marginTop: 100 }}>
           <Text>No access to Camera or Gallery!</Text>
         </View>
       )
@@ -110,7 +130,7 @@ class App extends Component {
             statusBarProps={{ barStyle: 'light-content' }}
             backgroundColor='black'
             leftComponent={
-              <TouchableOpacity onPress={() => alert('soon')}>
+              <TouchableOpacity onPress={this.pickImage}>
                 <Icon name='photo-album' color='#fff' />
               </TouchableOpacity>
             }
@@ -119,7 +139,7 @@ class App extends Component {
               style: { color: '#fff', fontSize: 20, fontWeight: 'bold' }
             }}
             rightComponent={
-              <TouchableOpacity onPress={() => alert('soon')}>
+              <TouchableOpacity onPress={this.takePhoto}>
                 <Icon name='camera-alt' color='#fff' />
               </TouchableOpacity>
             }

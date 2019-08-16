@@ -9,12 +9,14 @@
   },
   "dependencies": {
     "expo": "^34.0.1",
+    "expo-image-picker": "^6.0.0",
     "firebase": "6.0.1",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
     "react-native-elements": "^1.1.0",
-    "react-native-web": "^0.11.4"
+    "react-native-web": "^0.11.4",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "babel-preset-expo": "^6.0.0"
