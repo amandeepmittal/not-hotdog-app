@@ -4,6 +4,10 @@ A clone of [not-hotdog app](https://apps.apple.com/us/app/not-hotdog/id121245752
 
 - [Link to complete tutorial]()
 
+Demo 👇
+
+![demo](https://cdn-images-1.medium.com/max/800/1*Hg6nlnaROCavW5_YLygtEA.gif)
+
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/en/) (>=`10.x.x`) with npm/yarn installed.
