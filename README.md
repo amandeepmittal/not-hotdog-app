@@ -57,7 +57,7 @@ const VISION_API_KEY = 'XXXXX'
 - React Native: for creating cross-platform mobile apps with JavaScript and React.
 - Expo: for easily setting up React Native apps.
 - [react-native-elements](https://react-native-training.github.io/) UI component library
-- - [Vision AI](https://cloud.google.com/vision/?utm_source=google&utm_medium=cpc&utm_campaign=japac-IN-all-en-dr-bkws-all-super-trial-e-dr-1003987&utm_content=text-ad-none-none-DEV_c-CRE_256563224787-ADGP_Hybrid+%7C+AW+SEM+%7C+BKWS+~+T1+%7C+EXA+%7C+ML+%7C+1:1+%7C+IN+%7C+en+%7C+Vision+%7C+google+vision+api-KWID_43700023274811671-kwd-312947612586&userloc_9061696&utm_term=KW_google%20vision%20api&ds_rl=1264446&gclid=CjwKCAjwqNnqBRATEiwAkHm2BCkLuArU9ZtlYQ4p3bCJoHF0CDQ0Gm2o0rjZVWHWJ63kdpz7AbwtPxoCoWgQAvD_BwE)
+- [Vision AI](https://cloud.google.com/vision/?utm_source=google&utm_medium=cpc&utm_campaign=japac-IN-all-en-dr-bkws-all-super-trial-e-dr-1003987&utm_content=text-ad-none-none-DEV_c-CRE_256563224787-ADGP_Hybrid+%7C+AW+SEM+%7C+BKWS+~+T1+%7C+EXA+%7C+ML+%7C+1:1+%7C+IN+%7C+en+%7C+Vision+%7C+google+vision+api-KWID_43700023274811671-kwd-312947612586&userloc_9061696&utm_term=KW_google%20vision%20api&ds_rl=1264446&gclid=CjwKCAjwqNnqBRATEiwAkHm2BCkLuArU9ZtlYQ4p3bCJoHF0CDQ0Gm2o0rjZVWHWJ63kdpz7AbwtPxoCoWgQAvD_BwE)
 - [Firebase storage](https://console.firebase.google.com/)
 
 ### Donation
