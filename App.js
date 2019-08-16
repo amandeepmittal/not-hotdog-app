@@ -17,7 +17,7 @@ import firebase from './config/Firebase'
 
 const VISION_API_KEY = 'AIzaSyBIj3L0pxRZYlHgx_CAcakASf7OOhm4Exk'
 
-// YellowBox.ignoreWarnings(['Setting a timer'])
+YellowBox.ignoreWarnings(['Setting a timer'])
 
 async function uploadImageAsync(uri) {
   const blob = await new Promise((resolve, reject) => {
