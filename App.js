@@ -4,18 +4,48 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
-  Button,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native'
-import { Header } from 'react-native-elements'
+import { Header, Icon } from 'react-native-elements'
 import * as Permissions from 'expo-permissions'
+import UploadingOverlay from './components/UploadingOverlay'
 
 const VISION_API_KEY = 'AIzaSyBIj3L0pxRZYlHgx_CAcakASf7OOhm4Exk'
+
+async function uploadImageAsync(uri) {
+  const blob = await new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.onload = function() {
+      resolve(xhr.response)
+    }
+    xhr.onerror = function(e) {
+      console.log(e)
+      reject(new TypeError('Network request failed'))
+    }
+    xhr.responseType = 'blob'
+    xhr.open('GET', uri, true)
+    xhr.send(null)
+  })
+
+  const ref = firebase
+    .storage()
+    .ref()
+    .child(uuid.v4())
+  const snapshot = await ref.put(blob)
+
+  blob.close()
+
+  return await snapshot.ref.getDownloadURL()
+}
 
 class App extends Component {
   state = {
     hasGrantedCameraPermission: false,
-    hasGrantedCameraRollPermission: false
+    hasGrantedCameraRollPermission: false,
+    image: null,
+    uploading: true,
+    googleResponse: false
   }
 
   async componentDidMount() {
@@ -39,10 +69,29 @@ class App extends Component {
     }
   }
 
+  // renderUploadingOverlay = () => {
+  //   if (this.state.uploading) {
+  //     return (
+  //       <View
+  //         style={[
+  //           StyleSheet.absoluteFill,
+  //           {
+  //             backgroundColor: 'rgba(255,255,255,0.8)',
+  //             alignItems: 'center',
+  //             justifyContent: 'center'
+  //           }
+  //         ]}>
+  //         <ActivityIndicator color='#000' animating size='large' />
+  //       </View>
+  //     )
+  //   }
+  // }
+
   render() {
     const {
       hasGrantedCameraPermission,
-      hasGrantedCameraRollPermission
+      hasGrantedCameraRollPermission,
+      uploading
     } = this.state
 
     if (
@@ -60,17 +109,22 @@ class App extends Component {
           <Header
             statusBarProps={{ barStyle: 'light-content' }}
             backgroundColor='black'
-            leftComponent={{ icon: 'photo-album', color: '#fff' }}
+            leftComponent={
+              <TouchableOpacity onPress={() => alert('soon')}>
+                <Icon name='photo-album' color='#fff' />
+              </TouchableOpacity>
+            }
             centerComponent={{
               text: 'Not Hotdog?',
               style: { color: '#fff', fontSize: 20, fontWeight: 'bold' }
             }}
-            rightComponent={{
-              icon: 'photo-camera',
-              color: '#fff'
-            }}
+            rightComponent={
+              <TouchableOpacity onPress={() => alert('soon')}>
+                <Icon name='camera-alt' color='#fff' />
+              </TouchableOpacity>
+            }
           />
-          <Text>Not-hotdog app</Text>
+          {uploading ? <UploadingOverlay /> : null}
         </View>
       )
     }
