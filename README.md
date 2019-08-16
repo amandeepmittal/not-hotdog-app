@@ -4,8 +4,6 @@ A clone of [not-hotdog app](https://apps.apple.com/us/app/not-hotdog/id121245752
 
 - [Link to complete tutorial]()
 
-A workout tracking app created using React Native and Expo.
-
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/en/) (>=`10.x.x`) with npm/yarn installed.
