@@ -99,8 +99,8 @@ class App extends Component {
         uploadUrl = await uploadImageAsync(pickerResult.uri)
         this.setState({ image: uploadUrl })
       }
-    } catch (e) {
-      console.log(e)
+    } catch (error) {
+      console.log(error)
       alert('Image Upload failed')
     } finally {
       this.setState({ uploading: false })
