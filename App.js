@@ -3,11 +3,11 @@ import {
   View,
   Text,
   StyleSheet,
-  ActivityIndicator,
-  Image,
-  TouchableOpacity
+  TouchableOpacity,
+  YellowBox,
+  Image
 } from 'react-native'
-import { Header, Icon } from 'react-native-elements'
+import { Header, Icon, Button } from 'react-native-elements'
 import * as Permissions from 'expo-permissions'
 import * as ImagePicker from 'expo-image-picker'
 import uuid from 'uuid'
@@ -16,6 +16,8 @@ import UploadingOverlay from './components/UploadingOverlay'
 import firebase from './config/Firebase'
 
 const VISION_API_KEY = 'AIzaSyBIj3L0pxRZYlHgx_CAcakASf7OOhm4Exk'
+
+// YellowBox.ignoreWarnings(['Setting a timer'])
 
 async function uploadImageAsync(uri) {
   const blob = await new Promise((resolve, reject) => {
@@ -85,7 +87,7 @@ class App extends Component {
   pickImage = async () => {
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [16, 9]
+      aspect: [4, 3]
     })
 
     this.handleImagePicked(pickerResult)
@@ -105,6 +107,99 @@ class App extends Component {
     } finally {
       this.setState({ uploading: false })
     }
+  }
+
+  submitToGoogle = async () => {
+    try {
+      this.setState({ uploading: true })
+      let { image } = this.state
+      let body = JSON.stringify({
+        requests: [
+          {
+            features: [{ type: 'LABEL_DETECTION', maxResults: 7 }],
+            image: {
+              source: {
+                imageUri: image
+              }
+            }
+          }
+        ]
+      })
+      let response = await fetch(
+        `https://vision.googleapis.com/v1/images:annotate?key=${VISION_API_KEY}`,
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: body
+        }
+      )
+      let responseJson = await response.json()
+      // console.log(responseJson)
+      const getLabel = responseJson.responses[0].labelAnnotations.map(
+        obj => obj.description
+      )
+
+      // console.log('getLabel', getLabel)
+      let result =
+        getLabel.includes('Hot dog') ||
+        getLabel.includes('hot dog') ||
+        getLabel.includes('Hot dog bun')
+      // console.log(result)
+
+      this.setState({
+        googleResponse: result,
+        uploading: false
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  renderImage = () => {
+    let { image, googleResponse } = this.state
+    if (!image) {
+      return (
+        <View style={styles.renderImageContainer}>
+          <Button
+            buttonStyle={styles.button}
+            onPress={() => this.submitToGoogle()}
+            title='Check'
+            titleStyle={styles.buttonTitle}
+            disabled
+          />
+          <View style={styles.imageContainer}>
+            <Text style={styles.title}>
+              Upload an image to verify a hotdog!
+            </Text>
+            <Text style={styles.hotdogEmoji}>🌭</Text>
+          </View>
+        </View>
+      )
+    }
+
+    return (
+      <View style={styles.renderImageContainer}>
+        <Button
+          buttonStyle={styles.button}
+          onPress={() => this.submitToGoogle()}
+          title='Check'
+          titleStyle={styles.buttonTitle}
+        />
+
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: image }} style={styles.imageDisplay} />
+        </View>
+
+        {googleResponse ? (
+          <Text style={styles.hotdogEmoji}>🌭</Text>
+        ) : (
+          <Text style={styles.hotdogEmoji}>❌</Text>
+        )}
+      </View>
+    )
   }
 
   render() {
@@ -128,7 +223,7 @@ class App extends Component {
         <View style={styles.container}>
           <Header
             statusBarProps={{ barStyle: 'light-content' }}
-            backgroundColor='black'
+            backgroundColor='#55bcc9'
             leftComponent={
               <TouchableOpacity onPress={this.pickImage}>
                 <Icon name='photo-album' color='#fff' />
@@ -136,7 +231,7 @@ class App extends Component {
             }
             centerComponent={{
               text: 'Not Hotdog?',
-              style: { color: '#fff', fontSize: 20, fontWeight: 'bold' }
+              style: styles.headerCenter
             }}
             rightComponent={
               <TouchableOpacity onPress={this.takePhoto}>
@@ -144,6 +239,7 @@ class App extends Component {
               </TouchableOpacity>
             }
           />
+          {this.renderImage()}
           {uploading ? <UploadingOverlay /> : null}
         </View>
       )
@@ -154,7 +250,40 @@ class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#cafafe'
+  },
+  headerCenter: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  renderImageContainer: {
+    marginTop: 20,
+    alignItems: 'center'
+  },
+  button: {
+    backgroundColor: '#97caef',
+    borderRadius: 10,
+    width: 150,
+    height: 50
+  },
+  buttonTitle: {
+    fontWeight: '600'
+  },
+  imageContainer: {
+    margin: 25,
+    alignItems: 'center'
+  },
+  imageDisplay: {
+    width: 300,
+    height: 300
+  },
+  title: {
+    fontSize: 36
+  },
+  hotdogEmoji: {
+    marginTop: 20,
+    fontSize: 90
   }
 })
 
