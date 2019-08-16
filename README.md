@@ -2,7 +2,7 @@
 
 A clone of [not-hotdog app](https://apps.apple.com/us/app/not-hotdog/id1212457521) using React Native and Expo.
 
-**[Demo on Expo]()**
+- [Link to complete tutorial]()
 
 A workout tracking app created using React Native and Expo.
 
@@ -34,6 +34,26 @@ npm install
 expo start
 ```
 
+- Next, in `config/Firebase.js` replace the `firebaseConfig` object with your key values.
+
+```js
+const firebaseConfig = {
+  apiKey: 'XXXX',
+  authDomain: 'XXXX',
+  databaseURL: 'XXXX',
+  projectId: 'XXXX',
+  storageBucket: 'XXXX',
+  messagingSenderId: 'XXXX',
+  appId: 'XXXX'
+}
+```
+
+- Lastly, add the Vision API key in `App.js` file.
+
+```js
+const VISION_API_KEY = 'XXXXX'
+```
+
 ## Built With
 
 - React Native: for creating cross-platform mobile apps with JavaScript and React.
@@ -46,4 +66,4 @@ expo start
 
 If this project helped you reduce time to develop, please consider buying me a cup of coffee :)
 
-[Buy Me A Coffee](https://ko-fi.com/amanhimself)
+<a href='https://ko-fi.com/A611K61' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>

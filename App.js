@@ -15,7 +15,7 @@ import uuid from 'uuid'
 import UploadingOverlay from './components/UploadingOverlay'
 import firebase from './config/Firebase'
 
-const VISION_API_KEY = 'AIzaSyBIj3L0pxRZYlHgx_CAcakASf7OOhm4Exk'
+const VISION_API_KEY = 'XXXX'
 
 YellowBox.ignoreWarnings(['Setting a timer'])
 
